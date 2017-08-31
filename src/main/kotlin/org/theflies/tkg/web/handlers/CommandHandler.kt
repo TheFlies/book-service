@@ -19,8 +19,8 @@ class CommandHandler(val channels: Source) {
   fun changeBook(serverRequest: ServerRequest): Mono<ServerResponse> {
     // TODO: create event with changes from server request
     // TODO: publish event into a specific topic
-    channels.output().send(MessageBuilder.createMessage(ChangeBookEvent(serverRequest.bodyToMono(Book::class.java)
-        .block())))
+//    channels.output().send(MessageBuilder.createMessage(ChangeBookEvent(serverRequest.bodyToMono(Book::class.java)
+//        .block())))
 
     return accepted().build()
   }

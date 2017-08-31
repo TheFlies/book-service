@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: book-service
+server:
+  port: 9008
+---
+spring:
+  profiles: docker
+  cloud:
+    config:
+      uri: http://config-service:8888/config
+---
+spring:
+  profiles: default
+  cloud:
+    config:
+      uri: http://localhost:8888/config
+spring.profiles.active: dev
+---
+spring:
+  profiles: cloud
+  cloud:
+    config:
+      uri: ${the.cloud.config.service.uri:http://localhost:8888/config}
