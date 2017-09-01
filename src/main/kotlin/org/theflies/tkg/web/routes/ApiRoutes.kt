@@ -8,7 +8,7 @@ import org.theflies.tkg.web.handlers.BookHandler
 import org.theflies.tkg.web.handlers.CommandHandler
 
 @Configuration
-class ApiRoutes(val bookHandler: BookHandler, var comandHandler: CommandHandler) {
+class ApiRoutes(val bookHandler: BookHandler, var commandHandler: CommandHandler) {
 
   @Bean
   fun apiRouter() = router {
@@ -16,7 +16,8 @@ class ApiRoutes(val bookHandler: BookHandler, var comandHandler: CommandHandler)
       "/books".nest {
         GET("/", bookHandler::findAll)
         GET("/{id}", bookHandler::findOne)
-        PUT("/", comandHandler::changeBook)
+        PATCH("/", commandHandler::changeBook)
+        POST("/", commandHandler::createBook)
       }
     }
   }

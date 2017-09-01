@@ -13,19 +13,20 @@ import org.springframework.data.mongodb.core.findById
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Flux
+import reactor.core.publisher.Mono
 
 @Repository
 class BookRepository(val template: ReactiveMongoTemplate,
                      val objectMapper: ObjectMapper) {
 
-  private val log = LoggerFactory.getLogger(this.javaClass)
+  private val log = LoggerFactory.getLogger(BookRepository::class.java)
 
   fun initData() {
     if (count().block() == 0L) {
       val blogResource = ClassPathResource("data/books.json")
       val books: List<Book> = objectMapper.readValue(blogResource.inputStream)
-      books.forEach { save(it).block() }
-      log.info("Book data initialization complete")
+      template.insertAll(books).subscribe()
+      log.info("Book data initialization completed")
     }
   }
 
@@ -37,7 +38,7 @@ class BookRepository(val template: ReactiveMongoTemplate,
 
   fun findOne(id: String) = template.findById<Book>(id)
 
-  fun save(book: Book) = template.save(book)!!
+  fun save(book: Mono<Book>) : Mono<Book> = template.save(book)
 
   fun count() = template.count<Book>()
 }
